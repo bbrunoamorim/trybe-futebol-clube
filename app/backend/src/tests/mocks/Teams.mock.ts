@@ -15,4 +15,12 @@ const teamsMock: Team[] = [
   }
 ] as Team[];
 
-export default teamsMock;
+const teamMock: Team = {
+  id: 5,
+  teamName: 'Cruzeiro'
+} as Team;
+
+export {
+  teamsMock,
+  teamMock
+};

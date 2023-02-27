@@ -8,7 +8,7 @@ import { App } from '../app';
 import { Response } from 'superagent';
 
 import { Model } from 'sequelize';
-import teamsMock from './mocks/Teams.mock';
+import { teamsMock, teamMock } from './mocks/Teams.mock';
 import Team from '../database/models/TeamModel';
 
 chai.use(chaiHttp);
@@ -37,6 +37,24 @@ describe('01 - Tests for /teams route', () => {
       const response = await chai.request(app.app).get('/teams');
 
       expect(response.body).to.be.deep.equal(teamsMock);
-    })
+    });
+  });
+
+  describe('-> Requesting an especific team by its id', () => {
+    it('Returns the correct status with success request', async () => {
+      sinon.stub(Model, 'findOne').resolves(teamMock);
+
+      const response = await chai.request(app.app).get('/teams:5');
+
+      expect(response.status).to.be.equal(200);
+    });
+
+    it('Returns the correct JSON with success request', async () => {
+      sinon.stub(Model, 'findOne').resolves(teamMock);
+
+      const response = await chai.request(app.app).get('/teams');
+
+      expect(response.body).to.be.deep.equal(teamMock);
+    });
   });
 });
