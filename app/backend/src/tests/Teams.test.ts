@@ -44,7 +44,7 @@ describe('01 - Tests for /teams route', () => {
     it('Returns the correct status with success request', async () => {
       sinon.stub(Model, 'findOne').resolves(teamMock);
 
-      const response = await chai.request(app.app).get('/teams:5');
+      const response = await chai.request(app.app).get('/teams/5');
 
       expect(response.status).to.be.equal(200);
     });
@@ -52,7 +52,7 @@ describe('01 - Tests for /teams route', () => {
     it('Returns the correct JSON with success request', async () => {
       sinon.stub(Model, 'findOne').resolves(teamMock);
 
-      const response = await chai.request(app.app).get('/teams');
+      const response = await chai.request(app.app).get('/teams/5');
 
       expect(response.body).to.be.deep.equal(teamMock);
     });
