@@ -1,4 +1,5 @@
 import * as express from 'express';
+import teamRouter from './api/routes/TeamRoutes';
 
 class App {
   public app: express.Express;
@@ -8,6 +9,7 @@ class App {
 
     this.config();
 
+    this.initRoutes();
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
   }
@@ -26,6 +28,10 @@ class App {
 
   public start(PORT: string | number):void {
     this.app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+  }
+
+  private initRoutes(): void {
+    this.app.use(teamRouter);
   }
 }
 
