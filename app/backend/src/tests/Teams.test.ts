@@ -39,7 +39,7 @@ describe('01 - Tests for /teams route', () => {
 
   describe('-> Requesting an especific team by its id', () => {
     it('Returns the correct status with success request', async () => {
-      sinon.stub(Model, 'findOne').resolves(teamMock);
+      sinon.stub(Model, 'findByPk').resolves(teamMock);
 
       const response = await chai.request(app.app).get('/teams/5');
 
@@ -47,7 +47,7 @@ describe('01 - Tests for /teams route', () => {
     });
 
     it('Returns the correct JSON with success request', async () => {
-      sinon.stub(Model, 'findOne').resolves(teamMock);
+      sinon.stub(Model, 'findByPk').resolves(teamMock);
 
       const response = await chai.request(app.app).get('/teams/5');
 
