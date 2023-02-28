@@ -3,13 +3,10 @@ import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
-import { app } from '../app';
 import { App } from '../app';
-import { Response } from 'superagent';
 
 import { Model } from 'sequelize';
 import { teamsMock, teamMock } from './mocks/Teams.mock';
-import Team from '../database/models/TeamModel';
 
 chai.use(chaiHttp);
 
