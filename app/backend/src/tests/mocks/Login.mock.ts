@@ -8,6 +8,7 @@ const loginMock = {
 const noEmailLoginMock = {
   "password": "senhateste"
 }
+
 const noPassLoginMock = {
   "email": "joao@email.com"
 }

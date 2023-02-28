@@ -18,6 +18,8 @@ export default class TeamController {
 
     const result = await this._service.findById(Number(id));
 
+    if (!result) return res.status(400).json({ message: 'ID do time não encontrado' });
+
     return res.status(200).json(result);
   }
 }

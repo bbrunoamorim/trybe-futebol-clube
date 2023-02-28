@@ -1,5 +1,6 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
+import * as bcrypt from 'bcryptjs';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
@@ -12,9 +13,7 @@ import {
   noEmailLoginMock,
   noPassLoginMock,
   failLoginMessageMock
-} from './mocks/Users.mock';
-
-var bcrypt = require('bcryptjs');
+} from './mocks/Login.mock';
 
 chai.use(chaiHttp);
 
