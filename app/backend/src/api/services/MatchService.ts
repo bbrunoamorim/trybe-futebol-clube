@@ -31,4 +31,21 @@ export default class MatchService implements IMatchService {
       { where: { id } },
     );
   }
+
+  async create(
+    homeTeamId: number,
+    awayTeamId: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<IMatch> {
+    const newMatch = await this.model.create({
+      homeTeamId,
+      awayTeamId,
+      homeTeamGoals,
+      awayTeamGoals,
+      inProgress: true,
+    });
+
+    return newMatch as unknown as IMatch;
+  }
 }

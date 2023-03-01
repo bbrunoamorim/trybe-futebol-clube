@@ -18,5 +18,10 @@ matchRouter.patch(
   AuthMiddleware.verifyToken,
   (req: Request, res: Response) => matchController.updateMatch(req, res),
 );
+matchRouter.post(
+  '/matches',
+  AuthMiddleware.verifyToken,
+  (req: Request, res: Response) => matchController.create(req, res),
+);
 
 export default matchRouter;
