@@ -1,12 +1,13 @@
 import { INTEGER, Model, BOOLEAN } from 'sequelize';
 import db from '.';
+import Team from './TeamModel';
 
-class Matches extends Model {
+class Match extends Model {
   declare readonly id: number;
   declare teamName: string;
 }
 
-Matches.init({
+Match.init({
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -57,4 +58,9 @@ Matches.init({
   timestamps: false,
 });
 
-export default Matches;
+Match.belongsTo(Team, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+Match.belongsTo(Team, { foreignKey: 'awayTeamId', as: 'awayTeam' });
+Team.hasMany(Match, { foreignKey: 'homeTeamId' });
+Team.hasMany(Match, { foreignKey: 'awayTeamId' });
+
+export default Match;
