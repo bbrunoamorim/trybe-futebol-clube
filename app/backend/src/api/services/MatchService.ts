@@ -48,4 +48,10 @@ export default class MatchService implements IMatchService {
 
     return newMatch as unknown as IMatch;
   }
+
+  async findById(id: number): Promise<IMatch> {
+    const user = await this.model.findOne({ where: { id } });
+
+    return user as unknown as IMatch;
+  }
 }
