@@ -5,7 +5,6 @@ import chaiHttp = require('chai-http');
 
 import { App } from '../app';
 
-import { Model } from 'sequelize';
 import {
   loginMock,
   noEmailLoginMock,
