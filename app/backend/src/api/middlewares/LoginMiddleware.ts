@@ -8,7 +8,7 @@ export default class loginMiddleware {
     const emailCheck = emailRegex.test(email);
 
     if (!email || !password) {
-      return res.status(400).send({ message: 'All fields must be filled' });
+      return res.status(400).json({ message: 'All fields must be filled' });
     }
 
     if (!emailCheck || password.length < 6) {

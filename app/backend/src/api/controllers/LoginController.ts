@@ -17,4 +17,14 @@ export default class LoginController {
 
     return res.status(200).json(result);
   }
+
+  async getRole(req: Request, res: Response) {
+    const { authorization } = req.headers;
+
+    const result = await this._service.getRole(authorization);
+
+    if (!result) return res.status(401).json({ message: 'Token must be a valid token' });
+
+    return res.status(200).json(result);
+  }
 }
