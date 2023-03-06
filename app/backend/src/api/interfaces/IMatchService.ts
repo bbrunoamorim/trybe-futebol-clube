@@ -9,5 +9,6 @@ export default interface IMatchService {
     awayTeamId: number,
     homeTeamGoals: number,
     awayTeamGoals: number): Promise<IMatch>,
-  findById(id: number): Promise<IMatch>
+  findById(id: number): Promise<IMatch>,
+  getFinishedMatches(): Promise<IMatch[]>
 }

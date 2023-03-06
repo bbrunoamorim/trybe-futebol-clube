@@ -54,4 +54,16 @@ export default class MatchService implements IMatchService {
 
     return user as unknown as IMatch;
   }
+
+  async getFinishedMatches(): Promise<IMatch[]> {
+    const matches = await this.model.findAll({
+      where: { inProgress: false },
+      include: [
+        { model: Team, as: 'homeTeam', attributes: { exclude: ['id'] } },
+        { model: Team, as: 'awayTeam', attributes: { exclude: ['id'] } },
+      ],
+    });
+
+    return matches as unknown as IMatch[];
+  }
 }
