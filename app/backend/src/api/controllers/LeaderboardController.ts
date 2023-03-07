@@ -13,7 +13,7 @@ export default class LeaderboardController {
     this._teamsService = teamService;
   }
 
-  static countTotalMatches(id: number, matches: IMatch[]): number {
+  private static countTotalMatches(id: number, matches: IMatch[]): number {
     let count = 0;
 
     matches.forEach((match) => {
@@ -23,7 +23,7 @@ export default class LeaderboardController {
     return count;
   }
 
-  static countGoalsHome(id: number, matches: IMatch[]): number {
+  private static countGoalsHome(id: number, matches: IMatch[]): number {
     let count = 0;
 
     matches.forEach((match) => {
@@ -34,7 +34,7 @@ export default class LeaderboardController {
     return count;
   }
 
-  static countGoalsAway(id: number, matches: IMatch[]): number {
+  private static countGoalsAway(id: number, matches: IMatch[]): number {
     let count = 0;
 
     matches.forEach((match) => {
@@ -45,7 +45,7 @@ export default class LeaderboardController {
     return count;
   }
 
-  static countTotalLosses(id: number, matches: IMatch[]): number {
+  private static countTotalLosses(id: number, matches: IMatch[]): number {
     let count = 0;
 
     matches.forEach((match) => {
@@ -56,7 +56,7 @@ export default class LeaderboardController {
     return count;
   }
 
-  static countWinsAndPoints(id: number, matches: IMatch[]): number[] {
+  private static countWinsAndPoints(id: number, matches: IMatch[]): number[] {
     let wins = 0;
     let points = 0;
 
@@ -74,33 +74,62 @@ export default class LeaderboardController {
     return [wins, points];
   }
 
-  static getAllStats(teams: ITeam[], matches: IMatch[]) {
+  static getHomeStats(teams: ITeam[], matches: IMatch[]) {
     const result = teams.map(({ id, teamName }) => {
-      const totalGames = LeaderboardController.countTotalMatches(id as number, matches);
-      const totalWinsAndPoints = LeaderboardController.countWinsAndPoints(id as number, matches);
-      const totalLosses = LeaderboardController.countTotalLosses(id as number, matches);
-      const goalsFavor = LeaderboardController.countGoalsHome(id as number, matches);
-      const goalsOwn = LeaderboardController.countGoalsAway(id as number, matches);
-
+      const homeTeamMatches = matches.filter(({ homeTeamId }) => homeTeamId === id);
+      const totalDraws = LeaderboardController.countTotalMatches(id as number, homeTeamMatches)
+        - LeaderboardController.countWinsAndPoints(id as number, homeTeamMatches)[0]
+        - LeaderboardController.countTotalLosses(id as number, homeTeamMatches);
       return {
         name: teamName,
-        totalPoints: totalWinsAndPoints[1] + (totalGames - totalWinsAndPoints[0] - totalLosses),
-        totalGames,
-        totalVictories: totalWinsAndPoints[0],
-        totalDraws: totalGames - totalWinsAndPoints[0] - totalLosses,
-        totalLosses,
-        goalsFavor,
-        goalsOwn,
+        totalPoints: LeaderboardController
+          .countWinsAndPoints(id as number, homeTeamMatches)[1] + totalDraws,
+        totalGames: LeaderboardController.countTotalMatches(id as number, homeTeamMatches),
+        totalVictories: LeaderboardController.countWinsAndPoints(id as number, homeTeamMatches)[0],
+        totalDraws,
+        totalLosses: LeaderboardController.countTotalLosses(id as number, homeTeamMatches),
+        goalsFavor: LeaderboardController.countGoalsHome(id as number, homeTeamMatches),
+        goalsOwn: LeaderboardController.countGoalsAway(id as number, homeTeamMatches),
       };
     });
 
     return result;
   }
 
-  async getLeaderboard(_req: Request, res: Response) {
+  static getAwayStats(teams: ITeam[], matches: IMatch[]) {
+    const result = teams.map(({ id, teamName }) => {
+      const homeTeamMatches = matches.filter(({ awayTeamId }) => awayTeamId === id);
+      const totalDraws = LeaderboardController.countTotalMatches(id as number, homeTeamMatches)
+        - LeaderboardController.countWinsAndPoints(id as number, homeTeamMatches)[0]
+        - LeaderboardController.countTotalLosses(id as number, homeTeamMatches);
+      return {
+        name: teamName,
+        totalPoints: LeaderboardController
+          .countWinsAndPoints(id as number, homeTeamMatches)[1] + totalDraws,
+        totalGames: LeaderboardController.countTotalMatches(id as number, homeTeamMatches),
+        totalVictories: LeaderboardController.countWinsAndPoints(id as number, homeTeamMatches)[0],
+        totalDraws,
+        totalLosses: LeaderboardController.countTotalLosses(id as number, homeTeamMatches),
+        goalsFavor: LeaderboardController.countGoalsHome(id as number, homeTeamMatches),
+        goalsOwn: LeaderboardController.countGoalsAway(id as number, homeTeamMatches),
+      };
+    });
+
+    return result;
+  }
+
+  async getHomeLeaderboard(_req: Request, res: Response) {
     const matches = await this._matchesService.getFinishedMatches();
     const teams = await this._teamsService.findAll();
-    const result = LeaderboardController.getAllStats(teams, matches);
+    const result = LeaderboardController.getHomeStats(teams, matches);
+
+    return res.status(200).json(result);
+  }
+
+  async getAwayLeaderboard(_req: Request, res: Response) {
+    const matches = await this._matchesService.getFinishedMatches();
+    const teams = await this._teamsService.findAll();
+    const result = LeaderboardController.getAwayStats(teams, matches);
 
     return res.status(200).json(result);
   }

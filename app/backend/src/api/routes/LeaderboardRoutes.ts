@@ -10,7 +10,11 @@ const leaderboardController = new LeaderboardController(matchService, teamServic
 
 leaderboardRouter.get(
   '/leaderboard/home',
-  (req: Request, res: Response) => leaderboardController.getLeaderboard(req, res),
+  (req: Request, res: Response) => leaderboardController.getHomeLeaderboard(req, res),
+);
+leaderboardRouter.get(
+  '/leaderboard/away',
+  (req: Request, res: Response) => leaderboardController.getAwayLeaderboard(req, res),
 );
 
 export default leaderboardRouter;
